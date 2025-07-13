@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasky - Task Management Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <span>Tasky</span>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="#" onclick="showSection('dashboard')">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('tasks')">
+                            <i class="fas fa-list"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('metrics')">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Metrics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('settings')">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h1>Good morning, Developer!</h1>
+                    <p>Here's your task management overview for today.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="showCreateTaskModal()">
+                        <i class="fas fa-plus"></i>
+                        New Task
+                    </button>
+                    <button class="btn btn-secondary" onclick="refreshData()">
+                        <i class="fas fa-sync"></i>
+                        Refresh
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon total">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-tasks">0</h3>
+                            <p>Total Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="pending-tasks">0</h3>
+                            <p>Pending Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon completed">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="completed-tasks">0</h3>
+                            <p>Completed Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon rate">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="completion-rate">0%</h3>
+                            <p>Completion Rate</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Tasks -->
+                <div class="recent-tasks">
+                    <h2>Recent Tasks</h2>
+                    <div class="task-list" id="recent-tasks-list">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tasks Section -->
+            <section id="tasks" class="section">
+                <div class="section-header">
+                    <h2>All Tasks</h2>
+                    <div class="filters">
+                        <select id="status-filter" onchange="filterTasks()">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tasks-grid" id="tasks-grid">
+                    <!-- Tasks will be populated here -->
+                </div>
+            </section>
+
+            <!-- Metrics Section -->
+            <section id="metrics" class="section">
+                <div class="section-header">
+                    <h2>System Metrics</h2>
+                    <button class="btn btn-secondary" onclick="loadMetrics()">
+                        <i class="fas fa-sync"></i>
+                        Refresh Metrics
+                    </button>
+                </div>
+                <div class="metrics-content">
+                    <div class="metric-card">
+                        <h3>API Performance</h3>
+                        <div class="metric-info">
+                            <p>Monitor your API endpoints and response times</p>
+                            <a href="http://localhost:8000/metrics" target="_blank" class="btn btn-outline">
+                                <i class="fas fa-external-link-alt"></i>
+                                View Raw Metrics
+                            </a>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Grafana Dashboard</h3>
+                        <div class="metric-info">
+                            <p>Advanced monitoring and visualization</p>
+                            <a href="http://localhost:3000" target="_blank" class="btn btn-outline">
+                                <i class="fas fa-chart-line"></i>
+                                Open Grafana
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="section">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>API Configuration</h3>
+                        <div class="setting-item">
+                            <label for="api-url">API Base URL:</label>
+                            <input type="text" id="api-url" value="http://localhost:8000">
+                        </div>
+                        <div class="setting-item">
+                            <label for="refresh-interval">Auto Refresh Interval (seconds):</label>
+                            <input type="number" id="refresh-interval" value="30" min="5">
+                        </div>
+                        <div class="setting-actions">
+                            <button class="btn btn-secondary" onclick="testBackendConnection()">
+                                <i class="fas fa-link"></i>
+                                Test Connection
+                            </button>
+                            <button class="btn btn-primary" onclick="saveSettings()">
+                                <i class="fas fa-save"></i>
+                                Save Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Create Task Modal -->
+    <div id="createTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Task</h3>
+                <span class="close" onclick="closeCreateTaskModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="createTaskForm">
+                    <div class="form-group">
+                        <label for="taskTitle">Title *</label>
+                        <input type="text" id="taskTitle" required maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description</label>
+                        <textarea id="taskDescription" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskStatus">Status</label>
+                        <select id="taskStatus">
+                            <option value="pending">Pending</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeCreateTaskModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createTask()">Create Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="editTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+                <span class="close" onclick="closeEditTaskModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editTaskForm">
+                    <div class="form-group">
+                        <label for="editTaskTitle">Title *</label>
+                        <input type="text" id="editTaskTitle" required maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="editTaskDescription">Description</label>
+                        <textarea id="editTaskDescription" rows="3" maxlength="1000"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTaskStatus">Status</label>
+                        <select id="editTaskStatus">
+                            <option value="pending">Pending</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditTaskModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="updateTask()">Update Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

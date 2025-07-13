@@ -1,19 +1,22 @@
-# Tasky - Task Management API
+# Tasky - Task Management System
 
-A comprehensive Task Management API built with FastAPI, featuring monitoring, testing, and API gateway capabilities.
+A comprehensive Task Management system with FastAPI backend and modern web dashboard, featuring monitoring, testing, and API gateway capabilities.
 
 ## 🚀 Features
 
+- **📊 Web Dashboard**: Modern, responsive frontend with real-time updates
 - **CRUD Operations**: Create, read, update, and delete tasks
 - **Task Filtering**: Filter tasks by status (pending, done)
 - **Metrics & Monitoring**: Prometheus metrics and Grafana dashboards
 - **API Gateway**: Apache APISIX for API management
 - **Testing**: Comprehensive pytest test suite with coverage
 - **CI/CD**: GitHub Actions workflow for automated testing and deployment
+- **🎨 Modern UI**: Dark theme, responsive design, keyboard shortcuts
 
 ## 🛠️ Tech Stack
 
 - **Backend**: FastAPI
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
 - **Testing**: Pytest + Coverage
 - **Monitoring**: Prometheus + Grafana
 - **API Gateway**: Apache APISIX
@@ -33,11 +36,64 @@ A comprehensive Task Management API built with FastAPI, featuring monitoring, te
 | GET | `/metrics` | Prometheus metrics |
 | GET | `/stats` | Task statistics |
 
+## 🎨 Frontend Dashboard
+
+The modern web dashboard provides an intuitive interface for managing tasks:
+
+### Features
+- **📊 Dashboard Overview**: Real-time statistics and recent tasks
+- **✅ Task Management**: Create, edit, and delete tasks with modal dialogs
+- **🔍 Filtering**: Filter tasks by status (All, Pending, Done)
+- **📈 Metrics Integration**: View system metrics and links to Grafana
+- **⚙️ Settings**: Configure API URL and auto-refresh intervals
+- **📱 Responsive Design**: Works on desktop, tablet, and mobile
+- **⌨️ Keyboard Shortcuts**: `Ctrl+N` (new task), `Ctrl+R` (refresh), `Esc` (close modals)
+
+### Screenshots
+The dashboard features a dark theme with:
+- Statistics cards showing task metrics
+- Task list with inline actions
+- Modern UI with smooth animations
+- Real-time updates every 30 seconds
+
+### Manual Frontend Setup
+If you prefer to run the frontend separately:
+
+```bash
+cd frontend
+python server.py
+```
+
+Then open http://localhost:3001 in your browser.
+
 ## 🏃‍♂️ Quick Start
 
 ### Prerequisites
 - Docker and Docker Compose
 - Python 3.11+ (for local development)
+
+### 🚀 Easy Start (Recommended)
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd tasky
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Start both backend and frontend:
+```bash
+python start_servers.py
+```
+
+4. Open your browser:
+- **Frontend Dashboard**: http://localhost:3001
+- **Backend API**: http://localhost:8000
+- **API Documentation**: http://localhost:8000/docs
 
 ### Running with Docker Compose
 

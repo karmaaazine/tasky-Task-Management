@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
 from pydantic import BaseModel
 from .models import Task, TaskCreate, TaskUpdate
@@ -10,6 +11,15 @@ import time
 
 app = FastAPI(title="Tasky - Task Management API", version="1.0.0")
 task_crud = TaskCRUD()
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Middleware for metrics
 @app.middleware("http")

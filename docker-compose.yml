@@ -9,6 +9,18 @@ services:
     networks:
       - tasky-network
 
+  tasky-frontend:
+    build: ./frontend
+    container_name: tasky-frontend
+    ports:
+      - "3001:3001"
+    environment:
+      - API_BASE_URL=http://tasky-api:8000
+    depends_on:
+      - tasky-api
+    networks:
+      - tasky-network
+
   apisix:
     image: apache/apisix:3.7.0-debian
     container_name: apisix

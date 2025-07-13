@@ -6,6 +6,14 @@ on:
   pull_request:
     branches: [ main, master ]
 
+# Add permissions block at workflow level
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+  checks: write
+  pull-requests: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -60,6 +68,11 @@ jobs:
 
   security:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+      checks: write
     
     steps:
     - uses: actions/checkout@v4
@@ -71,9 +84,20 @@ jobs:
         scan-ref: '.'
         format: 'sarif'
         output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH'
+    
+    - name: Verify SARIF file exists
+      run: |
+        if [ ! -f trivy-results.sarif ]; then
+          echo "Error: SARIF file not found"
+          exit 1
+        fi
+        echo "SARIF file size: $(ls -l trivy-results.sarif | awk '{print $5}') bytes"
     
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
-        sarif_file: 'trivy-results.sarif' 
+        sarif_file: 'trivy-results.sarif'
+        category: 'trivy'
+        wait-for-processing: true
