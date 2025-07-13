@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  tasky-api:
+    build: .
+    container_name: tasky-api
+    ports:
+      - "8000:8000"
+    networks:
+      - tasky-network
+
+  apisix:
+    image: apache/apisix:3.7.0-debian
+    container_name: apisix
+    ports:
+      - "9080:9080"
+      - "9091:9091"
+    environment:
+      - APISIX_STAND_ALONE=true
+    volumes:
+      - ./apisix.yml:/usr/local/apisix/conf/apisix.yaml:ro
+    depends_on:
+      - tasky-api
+    networks:
+      - tasky-network
+
+  # Fallback metrics endpoint
+  nginx-metrics:
+    image: nginx:1.25-alpine
+    container_name: nginx-metrics
+    ports:
+      - "9092:80"
+    volumes:
+      - ./nginx-metrics.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - apisix
+    networks:
+      - tasky-network
+
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    depends_on:
+      - tasky-api
+      - apisix
+      - nginx-metrics
+    networks:
+      - tasky-network
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+    networks:
+      - tasky-network
+
+networks:
+  tasky-network:
+    driver: bridge
+
+volumes:
+  grafana-storage: 

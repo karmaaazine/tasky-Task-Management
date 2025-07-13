@@ -1,0 +1,31 @@
+deployment:
+  role: traditional
+  role_traditional:
+    config_provider: yaml
+
+apisix:
+  node_listen: 9080
+  enable_admin: false
+  enable_control: false
+
+routes:
+  - id: 1
+    uri: "/*"
+    upstream_id: 1
+
+upstreams:
+  - id: 1
+    type: roundrobin
+    nodes:
+      "tasky-api:8000": 1
+
+plugins:
+  - prometheus
+
+plugin_attr:
+  prometheus:
+    export_addr:
+      ip: 0.0.0.0
+      port: 9091
+
+#END 
