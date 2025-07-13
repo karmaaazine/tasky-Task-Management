@@ -12,15 +12,30 @@ routes:
   - id: 1
     uri: "/*"
     upstream_id: 1
+    plugins:
+      prometheus:
+        prefer_name: true
+  - id: 2
+    uri: "/apisix/prometheus/metrics"
+    plugins:
+      prometheus:
+        prefer_name: true
+    upstream_id: 2
 
 upstreams:
   - id: 1
     type: roundrobin
     nodes:
       "tasky-api:8000": 1
+  - id: 2
+    type: roundrobin
+    nodes:
+      "localhost:9091": 1
+    scheme: http
 
 plugins:
-  - prometheus
+  prometheus:
+    enable: true
 
 plugin_attr:
   prometheus:

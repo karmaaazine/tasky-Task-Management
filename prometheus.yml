@@ -22,7 +22,7 @@ scrape_configs:
   # Apache APISIX (if metrics work)
   - job_name: 'apisix'
     static_configs:
-      - targets: ['apisix:9091']
+      - targets: ['apisix:9080']
     metrics_path: '/apisix/prometheus/metrics'
     scrape_interval: 5s
     
