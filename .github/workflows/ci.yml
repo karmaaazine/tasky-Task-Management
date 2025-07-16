@@ -47,9 +47,9 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: false
 
-  # build:
-  #   needs: test
-  #   runs-on: ubuntu-latest
+  build:
+    needs: test
+    runs-on: ubuntu-latest
     
   #   steps:
   #   - uses: actions/checkout@v4
