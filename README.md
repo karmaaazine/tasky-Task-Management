@@ -50,11 +50,6 @@ The modern web dashboard provides an intuitive interface for managing tasks:
 - **⌨️ Keyboard Shortcuts**: `Ctrl+N` (new task), `Ctrl+R` (refresh), `Esc` (close modals)
 
 ### Screenshots
-The dashboard features a dark theme with:
-- Statistics cards showing task metrics
-- Task list with inline actions
-- Modern UI with smooth animations
-- Real-time updates every 30 seconds
 
 ### Manual Frontend Setup
 If you prefer to run the frontend separately:
